@@ -1,0 +1,72 @@
+.react-datepicker-popper {
+  z-index: 1000;
+}
+
+.react-datepicker {
+  padding: 10px;
+  animation: fadeIn 0.3s ease-in-out;
+  border: none;
+}
+
+/* 모달의 오버레이 배경 추가 */
+.react-datepicker__tab-loop::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+
+.react-datepicker__navigation {
+  top: 14px;
+}
+
+.react-datepicker__day {
+  background-color: white;
+  border: 1px solid #0a289a;
+  border-radius: 20px;
+  width: 35px;
+}
+
+.react-datepicker__day--selected {
+  background-color: #0a289a;
+}
+
+.react-datepicker__day-name {
+  width: 35px;
+}
+
+.react-datepicker__header {
+  background-color: white;
+  border-bottom: 2px solid rgb(236, 236, 236);
+  margin-bottom: 20px;
+}
+
+.react-datepicker__day--outside-month {
+  border: none;
+  color: rgb(220, 220, 220);
+}
+
+.react-datepicker__day-name {
+  color: pink;
+  font-weight: bold;
+}
+
+.react-datepicker__triangle {
+  display: none;
+}
+
+/* animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
