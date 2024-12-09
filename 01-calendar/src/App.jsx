@@ -20,7 +20,7 @@ function App() {
         selected={startDate}
         selectedDates={selectedDates}
         onChange={onChange}
-        dateFormat="yyyy. MM. dd"
+        dateFormat="yyyy-MM-dd"
         portalId="root-portal"
         locale={ko}
         selectsMultiple
