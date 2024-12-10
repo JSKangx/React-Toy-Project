@@ -1,3 +1,9 @@
+import PropTypes from "prop-types";
+
+Profile.propTypes = {
+  isLogin: PropTypes.bool.isRequired,
+};
+
 export default function Profile({ isLogin }) {
   return (
     <div className="h-[100px] flex flex-col items-center justify-center">
