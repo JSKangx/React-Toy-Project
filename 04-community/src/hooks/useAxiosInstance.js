@@ -38,4 +38,6 @@ export default function useAxiosInstance() {
       return Promise.reject(error);
     }
   );
+
+  return instance;
 }
