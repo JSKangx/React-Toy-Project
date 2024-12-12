@@ -2,24 +2,56 @@ import InputError from "@components/InputError";
 import useAxiosInstance from "@hooks/useAxiosInstance";
 import { useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 
 export default function Signup() {
   const axios = useAxiosInstance();
+  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
     formState: { errors },
+    setError,
   } = useForm();
 
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
   const onSignUp = useMutation({
-    mutationFn: (formData) => {
-      console.log(formData);
-      formData.type = "user";
-      axios.post("/users", formData);
+    mutationFn: async (userInfo) => {
+      console.log(userInfo.attach);
+      if (userInfo.attach) {
+        const imageFormData = new FormData();
+        imageFormData.append("attach", userInfo.attach[0]);
+        const fileRes = await axios.post("/files", imageFormData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+        // 유저 정보의 image 값에 응답받은 파일 정보가 들어있는 객체 설정
+        userInfo.image = fileRes.data.item[0];
+        // 서버에는 파일 데이터를 보낼 필요가 없다.
+        delete userInfo.attach;
+      }
+
+      userInfo.type = "user";
+      return axios.post("/users", userInfo);
     },
-    onSuccess: (res) => console.log(res),
+    onSuccess: (res) => {
+      alert(`${res.data.item.name}님 회원가입이 완료되었습니다.`);
+      navigate("/");
+    },
+    onError: (err) => {
+      // 에러 메시지가 있다면 (4xx, 5xx)
+      if (err.response?.data.errors) {
+        err.response?.data.errors.forEach((error) =>
+          setError(error.path, { message: error.msg })
+        );
+      } else {
+        // 에러 메시지가 없다면
+        alert(err.response?.data.message || "잠시 후 다시 요청하세요.");
+      }
+    },
   });
 
   return (
