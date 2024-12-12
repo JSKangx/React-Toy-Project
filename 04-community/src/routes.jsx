@@ -4,6 +4,7 @@ import Layout from "@pages/Layout";
 import List from "@pages/List";
 import Login from "@pages/Login";
 import MainPage from "@pages/MainPage";
+import New from "@pages/New";
 import Signup from "@pages/Signup";
 import { createBrowserRouter } from "react-router-dom";
 
@@ -16,6 +17,7 @@ const router = createBrowserRouter([
       { path: ":type", element: <List /> },
       { path: ":type/:_id", element: <Detail /> },
       { path: ":type/:_id/edit", element: <Edit /> },
+      { path: ":type/new", element: <New /> },
       { path: "users/login", element: <Login /> },
       { path: "users/signup", element: <Signup /> },
     ],
