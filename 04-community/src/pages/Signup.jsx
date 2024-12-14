@@ -19,8 +19,8 @@ export default function Signup() {
 
   const onSignUp = useMutation({
     mutationFn: async (userInfo) => {
-      console.log(userInfo.attach);
-      if (userInfo.attach) {
+      // attach 가 있는지 없는지만으로는 파일이 첨부되었는지 알 수 없다. 파일을 첨부하지 않아도 input:file이 있다면 attach(fileList)가 빈객체로 첨부되기 때문이다.
+      if (userInfo.attach.length > 0) {
         const imageFormData = new FormData();
         imageFormData.append("attach", userInfo.attach[0]);
         const fileRes = await axios.post("/files", imageFormData, {
@@ -34,7 +34,6 @@ export default function Signup() {
         delete userInfo.attach;
       }
 
-      userInfo.type = "user";
       return axios.post("/users", userInfo);
     },
     onSuccess: (res) => {
@@ -117,6 +116,43 @@ export default function Signup() {
               {...register("password", { required: "비밀번호는 필수입니다." })}
             />
             <InputError target={errors.password} />
+          </div>
+
+          <div className="mb-4">
+            <p className="block text-gray-700 dark:text-gray-200 mb-2">
+              회원 타입
+            </p>
+            <label
+              htmlFor="type-user"
+              className="text-gray-700 dark:text-gray-200 mb-2 mr-5"
+            >
+              <input
+                id="type-user"
+                type="radio"
+                className="mr-2"
+                value="user"
+                {...register("type", {
+                  required: "회원 타입 선택은 필수입니다.",
+                })}
+              />
+              일반 회원
+            </label>
+            <label
+              htmlFor="type-seller"
+              className="text-gray-700 dark:text-gray-200 mb-2"
+            >
+              <input
+                id="type-seller"
+                type="radio"
+                className="mr-2"
+                value="seller"
+                {...register("type", {
+                  required: "회원 타입 선택은 필수입니다.",
+                })}
+              />
+              판매 회원
+            </label>
+            <InputError target={errors.type} />
           </div>
 
           <div className="mb-4">

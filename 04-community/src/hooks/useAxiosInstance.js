@@ -28,7 +28,7 @@ export default function useAxiosInstance() {
   instance.interceptors.response.use(
     (response) => {
       // 제대로된 응답이 왔을 때 실행할 코드 블록
-      console.log(response);
+      console.log("인터셉터", response);
       return response;
     },
     (error) => {
