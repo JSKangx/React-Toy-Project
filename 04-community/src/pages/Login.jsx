@@ -1,10 +1,14 @@
 import InputError from "@components/InputError";
 import useAxiosInstance from "@hooks/useAxiosInstance";
 import { useMutation } from "@tanstack/react-query";
+import useUserStore from "@zustand/userStore";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 
 export default function Login() {
+  // 로그인 유저 상태 받아오기
+  const { user, setUser } = useUserStore();
+
   const axios = useAxiosInstance();
   const navigate = useNavigate();
 
@@ -19,9 +23,19 @@ export default function Login() {
     mutationFn: async (userInfo) => axios.post("/users/login", userInfo),
     onSuccess: (res) => {
       alert(`${res.data.item.name}님 환영합니다.`);
+      const loginUser = res.data.item;
+      let newUser = {
+        name: loginUser.name,
+        token: {
+          accessToken: loginUser.token.accessToken,
+          refreshToken: loginUser.token.refreshToken,
+        },
+      };
+      setUser(newUser);
       navigate("/");
     },
     onError: (err) => {
+      console.log(err);
       // 각각 input에 해당하는 에러 메시지가 있다면 (4xx, 5xx)
       if (err.response?.data.errors) {
         err.response?.data.errors.forEach((error) =>
