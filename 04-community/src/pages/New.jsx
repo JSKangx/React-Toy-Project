@@ -1,14 +1,15 @@
 import Button from "@components/Button";
 import InputError from "@components/InputError";
 import useAxiosInstance from "@hooks/useAxiosInstance";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 export default function New() {
   const axios = useAxiosInstance();
+  const navigate = useNavigate();
 
-  const { type } = useParams();
+  const { type, _id } = useParams();
 
   const {
     register,
@@ -16,11 +17,17 @@ export default function New() {
     formState: { errors },
   } = useForm();
 
+  const qeuryClient = useQueryClient();
+
   const addItem = useMutation({
     mutationFn: (formData) => {
       formData.type = type;
-      // return axios.post("/posts", formData);
-      console.log(formData);
+      return axios.post("/posts", formData);
+    },
+    onSuccess: () => {
+      alert("게시물이 등록되었습니다.");
+      qeuryClient.invalidateQueries({ queryKey: ["posts", type] });
+      navigate(`/${type}/${_id}`);
     },
   });
 

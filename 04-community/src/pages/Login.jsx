@@ -3,7 +3,7 @@ import useAxiosInstance from "@hooks/useAxiosInstance";
 import { useMutation } from "@tanstack/react-query";
 import useUserStore from "@zustand/userStore";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export default function Login() {
   // 로그인 유저 상태 받아오기
@@ -17,7 +17,12 @@ export default function Login() {
     handleSubmit,
     formState: { errors },
     setError,
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      email: "1229@test.com",
+      password: 11111111,
+    },
+  });
 
   const onLogin = useMutation({
     mutationFn: async (userInfo) => axios.post("/users/login", userInfo),

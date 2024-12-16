@@ -1,6 +1,9 @@
+import useUserStore from "@zustand/userStore";
 import { Link, NavLink } from "react-router-dom";
 
 export default function Header() {
+  const { user, resetUser } = useUserStore();
+
   return (
     <div className="flex justify-between mb-[50px]">
       <NavLink
@@ -38,8 +41,17 @@ export default function Header() {
         </NavLink>
       </div>
       <div className="flex gap-4 *:bg-orange-300 *:p-3">
-        <Link to="/users/login">로그인</Link>
-        <Link to="/users/signup">회원가입</Link>
+        {user ? (
+          <>
+            {`${user.name}님 환영합니다.`}
+            <button onClick={resetUser}>로그아웃</button>
+          </>
+        ) : (
+          <>
+            <Link to="/users/login">로그인</Link>
+            <Link to="/users/signup">회원가입</Link>
+          </>
+        )}
       </div>
     </div>
   );
