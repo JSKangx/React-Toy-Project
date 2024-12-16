@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function Login() {
   // 로그인 유저 상태 받아오기
-  const { user, setUser } = useUserStore();
+  const setUser = useUserStore((store) => store.setUser);
 
   const axios = useAxiosInstance();
   const navigate = useNavigate();
@@ -22,15 +22,15 @@ export default function Login() {
   const onLogin = useMutation({
     mutationFn: async (userInfo) => axios.post("/users/login", userInfo),
     onSuccess: (res) => {
-      alert(`${res.data.item.name}님 환영합니다.`);
-      const loginUser = res.data.item;
+      const user = res.data.item;
       let newUser = {
-        name: loginUser.name,
-        token: {
-          accessToken: loginUser.token.accessToken,
-          refreshToken: loginUser.token.refreshToken,
-        },
+        _id: user._id,
+        name: user.name,
+        profile: user.image?.path,
+        accessToken: user.token.accessToken,
+        refreshToken: user.token.refreshToken,
       };
+      alert(`${res.data.item.name}님 환영합니다.`);
       setUser(newUser);
       navigate("/");
     },
